@@ -10,8 +10,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 
+import com.creatingskies.game.classes.TableViewController;
 import com.creatingskies.game.common.MainLayout;
-import com.creatingskies.game.config.common.TableViewController;
 import com.creatingskies.game.model.IRecord;
 import com.creatingskies.game.model.user.User;
 import com.creatingskies.game.model.user.UserDao;
@@ -24,6 +24,11 @@ public class UsersController extends TableViewController {
 	@FXML private TableColumn<User, String> usernameColumn;
 	@FXML private TableColumn<User, String> typeColumn;
 	@FXML private TableColumn<User, Object> actionColumn;
+	
+	@Override
+	protected String getViewTitle() {
+		return "Users";
+	}
 	
 	public void show(){
 		try {
@@ -38,7 +43,8 @@ public class UsersController extends TableViewController {
 	
 	@FXML
 	@SuppressWarnings("unchecked")
-	private void initialize(){
+	public void initialize(){
+		super.initialize();
 		UserDao userDao = new UserDao();
 		
 		firstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));

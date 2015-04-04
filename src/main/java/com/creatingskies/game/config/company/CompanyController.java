@@ -11,9 +11,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 
+import com.creatingskies.game.classes.TableViewController;
 import com.creatingskies.game.common.AlertDialog;
 import com.creatingskies.game.common.MainLayout;
-import com.creatingskies.game.config.common.TableViewController;
 import com.creatingskies.game.model.IRecord;
 import com.creatingskies.game.model.company.Company;
 import com.creatingskies.game.model.company.CompanyDAO;
@@ -23,6 +23,11 @@ public class CompanyController extends TableViewController{
 	@FXML private TableView<Company> companiesTable;
 	@FXML private TableColumn<Company, String> nameColumn;
 	@FXML private TableColumn<Company, Object> actionColumn;
+	
+	@Override
+	protected String getViewTitle() {
+		return "Companies";
+	}
 	
 	public void show(){
 		try {
@@ -37,14 +42,15 @@ public class CompanyController extends TableViewController{
 
 	@FXML
 	@SuppressWarnings("unchecked")
-	private void initialize(){
+	public void initialize(){
+		super.initialize();
 		CompanyDAO companyDAO = new CompanyDAO();
 		
 		nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
 				cellData.getValue().getName()));
 		
 		actionColumn.setCellFactory(generateCellFactory(Action.EDIT, Action.DELETE));
-		companiesTable.setItems(FXCollections.observableArrayList(companyDAO.findAll()));
+		companiesTable.setItems(FXCollections.observableArrayList(companyDAO.findAllCompanies()));
 		companiesTable.getSelectionModel().selectedItemProperty()
 				.addListener((observable, oldValue, newValue) -> loadCompanyDetails(newValue));
 	}

@@ -7,7 +7,7 @@
 
 <AnchorPane minHeight="400.0" minWidth="800.0" prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.creatingskies.game.config.user.UsersController">
    <children>
-      <GridPane layoutX="14.0" layoutY="14.0" maxWidth="700.0" minWidth="700.0" prefWidth="700.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="60.0">
+      <GridPane layoutX="14.0" layoutY="14.0" maxWidth="700.0" minWidth="700.0" prefWidth="700.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="250.0" minWidth="250.0" prefWidth="100.0" />
@@ -26,7 +26,7 @@
             <Button mnemonicParsing="false" styleClass="button-primary" text="Filter" GridPane.columnIndex="4" />
          </children>
       </GridPane>
-      <TableView fx:id="usersTable" layoutY="40.0" prefHeight="200.0" prefWidth="793.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
+      <TableView fx:id="usersTable" layoutY="40.0" prefHeight="200.0" prefWidth="793.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
         <columns>
           <TableColumn fx:id="firstNameColumn" prefWidth="75.0" text="First Name" />
           <TableColumn fx:id="lastNameColumn" prefWidth="75.0" text="Last Name" />
@@ -38,6 +38,5 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Label id="header-title" layoutX="14.0" layoutY="14.0" text="Users" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
    </children>
 </AnchorPane>
