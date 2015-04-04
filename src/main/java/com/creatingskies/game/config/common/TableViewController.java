@@ -20,8 +20,6 @@ import com.creatingskies.game.model.IRecord;
 
 public abstract class TableViewController {
 
-	public abstract TableView<? extends IRecord> getTableView();
-	
 	private final int BUTTON_BAR_MIN_WIDTH_MULTIPLIER = 30;
 	private final int BUTTON_MIN_WIDTH = 20;
 	
@@ -29,8 +27,15 @@ public abstract class TableViewController {
 		VIEW, EDIT, DELETE, ACTIVATE;
 	}
 	
+	public abstract TableView<? extends IRecord> getTableView();
+	
 	@SuppressWarnings("rawtypes")
 	protected Callback generateCellFactory(Action... actions){
+		return generateCellFactory(getTableView(), actions);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	protected Callback generateCellFactory(TableView<? extends IRecord> tableView, Action... actions){
 		Callback<TableColumn<? extends IRecord, Object>, TableCell<? extends IRecord, Object>> 
 		actionColumnCellFactory = 
             new Callback<TableColumn<? extends IRecord, Object>, TableCell<? extends IRecord, Object>>() {
@@ -46,7 +51,7 @@ public abstract class TableViewController {
 							setGraphic(null);
 						} else {
 							setAlignment(Pos.CENTER);
-							setGraphic(createButtonBar(param, getIndex(), actions));
+							setGraphic(createButtonBar(tableView, param, getIndex(), actions));
 							setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 						}
 					}
@@ -58,7 +63,8 @@ public abstract class TableViewController {
 		return actionColumnCellFactory;
 	}
 	
-	private ButtonBar createButtonBar(TableColumn<? extends IRecord, Object> param,
+	private ButtonBar createButtonBar(TableView<? extends IRecord> tableView,
+			TableColumn<? extends IRecord, Object> param,
 			Integer index, Action... actions){
 		ButtonBar buttonBar = new ButtonBar();
 		buttonBar.setButtonMinWidth(BUTTON_MIN_WIDTH);
@@ -67,53 +73,53 @@ public abstract class TableViewController {
 
 		for(Action action : actions){
 			if(action.equals(Action.VIEW)){
-				buttonBar.getButtons().add(createViewButton(param, index));
+				buttonBar.getButtons().add(createViewButton(tableView, param, index));
 			} else if(action.equals(Action.EDIT)){
-				buttonBar.getButtons().add(createEditButton(param, index));
+				buttonBar.getButtons().add(createEditButton(tableView, param, index));
 			} else if(action.equals(Action.DELETE)){
-				buttonBar.getButtons().add(createDeleteButton(param, index));
+				buttonBar.getButtons().add(createDeleteButton(tableView, param, index));
 			} else if(action.equals(Action.ACTIVATE)){
-				buttonBar.getButtons().add(createActivateButton(param, index));
+				buttonBar.getButtons().add(createActivateButton(tableView, param, index));
 			}
 		}
 		return buttonBar;
 	}
 	
-	private Button createViewButton(
+	private Button createViewButton(TableView<? extends IRecord> tableView,
 			TableColumn<? extends IRecord, Object> param, Integer index){
 		Button viewButton = new TableRowViewButton();
-		viewButton.setOnAction(createViewEventHandler(param, index));
+		viewButton.setOnAction(createViewEventHandler(tableView, param, index));
 		return viewButton;
 	}
 	
-	private Button createEditButton(
+	private Button createEditButton(TableView<? extends IRecord> tableView,
 			TableColumn<? extends IRecord, Object> param, Integer index){
 		Button editButton = new TableRowEditButton();
-		editButton.setOnAction(createEditEventHandler(param, index));
+		editButton.setOnAction(createEditEventHandler(tableView, param, index));
 		return editButton;
 	}
 	
-	private Button createDeleteButton(
+	private Button createDeleteButton(TableView<? extends IRecord> tableView,
 			TableColumn<? extends IRecord, Object> param, Integer index){
 		Button deleteButton = new TableRowDeleteButton();
-		deleteButton.setOnAction(createDeleteEventHandler(param, index));
+		deleteButton.setOnAction(createDeleteEventHandler(tableView, param, index));
 		return deleteButton;
 	}
 	
-	private Button createActivateButton(
+	private Button createActivateButton(TableView<? extends IRecord> tableView,
 			TableColumn<? extends IRecord, Object> param, Integer index){
 		Button activateButton = new TableRowActivateButton();
-		activateButton.setOnAction(createActivateEventHandler(param, index));
+		activateButton.setOnAction(createActivateEventHandler(tableView, param, index));
 		return activateButton;
 	}
 	
-	private EventHandler<ActionEvent> createViewEventHandler(
+	private EventHandler<ActionEvent> createViewEventHandler(TableView<? extends IRecord> tableView,
 			TableColumn<? extends IRecord, Object> param, Integer index) {
 		return new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				param.getTableView().getSelectionModel().select(index);
-				IRecord record = getTableView().getSelectionModel().getSelectedItem();
+				IRecord record = tableView.getSelectionModel().getSelectedItem();
 				if (record != null) {
 					viewRecord(record);
 				}
@@ -121,13 +127,13 @@ public abstract class TableViewController {
 		};
 	}
 	
-	private EventHandler<ActionEvent> createEditEventHandler(
+	private EventHandler<ActionEvent> createEditEventHandler(TableView<? extends IRecord> tableView,
 			TableColumn<? extends IRecord, Object> param, Integer index) {
 		return new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				param.getTableView().getSelectionModel().select(index);
-				IRecord record = getTableView().getSelectionModel().getSelectedItem();
+				IRecord record = tableView.getSelectionModel().getSelectedItem();
 				if (record != null) {
 					editRecord(record);
 				}
@@ -135,13 +141,13 @@ public abstract class TableViewController {
 		};
 	}
 	
-	private EventHandler<ActionEvent> createDeleteEventHandler(
+	private EventHandler<ActionEvent> createDeleteEventHandler(TableView<? extends IRecord> tableView,
 			TableColumn<? extends IRecord, Object> param, Integer index) {
 		return new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				param.getTableView().getSelectionModel().select(index);
-				IRecord record = getTableView().getSelectionModel().getSelectedItem();
+				IRecord record = tableView.getSelectionModel().getSelectedItem();
 				if (record != null) {
 					deleteRecord(record);
 				}
@@ -149,13 +155,13 @@ public abstract class TableViewController {
 		};
 	}
 	
-	private EventHandler<ActionEvent> createActivateEventHandler(
+	private EventHandler<ActionEvent> createActivateEventHandler(TableView<? extends IRecord> tableView,
 			TableColumn<? extends IRecord, Object> param, Integer index) {
 		return new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				param.getTableView().getSelectionModel().select(index);
-				IRecord record = getTableView().getSelectionModel().getSelectedItem();
+				IRecord record = tableView.getSelectionModel().getSelectedItem();
 				if (record != null) {
 					activateRecord(record);
 				}
