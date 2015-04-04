@@ -18,10 +18,15 @@
           <RowConstraints vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
+            <Button mnemonicParsing="false" onAction="#handleAdd" styleClass="button-success" text="Add" GridPane.halignment="RIGHT">
+               <GridPane.margin>
+                  <Insets right="20.0" />
+               </GridPane.margin>
+            </Button>
       		<TableView fx:id="companiesTable" prefHeight="457.0" prefWidth="527.0" GridPane.rowIndex="1">
       			<columns>
-      				<TableColumn fx:id="nameColumn" prefWidth="300.0" text="Company" />
-                  <TableColumn fx:id="actionColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
+      				<TableColumn fx:id="companyNameColumn" prefWidth="300.0" text="Company" />
+                  <TableColumn fx:id="companyActionColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
       			</columns>
       			<columnResizePolicy>
       				<TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -30,20 +35,15 @@
                   <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
                </GridPane.margin>
       		</TableView>
-            <Label text="Companies">
-               <padding>
-                  <Insets left="20.0" />
-               </padding>
-            </Label>
             <Label text="Teams" GridPane.columnIndex="1">
                <padding>
                   <Insets left="20.0" />
                </padding>
             </Label>
-            <TableView fx:id="companiesTable1" prefHeight="457.0" prefWidth="527.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TableView fx:id="groupsTable" prefHeight="457.0" prefWidth="527.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <columns>
-                  <TableColumn fx:id="nameColumn1" prefWidth="300.0" text="Teams" />
-                  <TableColumn fx:id="actionColumn1" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
+                  <TableColumn fx:id="groupNameColumn" prefWidth="300.0" text="Groups" />
+                  <TableColumn fx:id="groupActionColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
