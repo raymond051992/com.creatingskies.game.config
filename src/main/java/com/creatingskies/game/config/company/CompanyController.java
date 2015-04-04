@@ -1,19 +1,20 @@
 package com.creatingskies.game.config.company;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import com.creatingskies.game.classes.TableViewController;
+import com.creatingskies.game.common.AlertDialog;
 import com.creatingskies.game.common.MainLayout;
 import com.creatingskies.game.model.IRecord;
 import com.creatingskies.game.model.company.Company;
@@ -29,6 +30,8 @@ public class CompanyController extends TableViewController{
 	@FXML private TableView<Group> groupsTable;
 	@FXML private TableColumn<Group, String> groupNameColumn;
 	@FXML private TableColumn<Group, Object> groupActionColumn;
+	
+	private CompanyDAO companyDAO;
 	
 	@Override
 	protected String getViewTitle() {
@@ -50,30 +53,30 @@ public class CompanyController extends TableViewController{
 	@SuppressWarnings("unchecked")
 	public void initialize(){
 		super.initialize();
+		companyDAO = new CompanyDAO();
+		
 		companyNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
 				cellData.getValue().getName()));
-		
 		companyActionColumn.setCellFactory(generateCellFactory(Action.EDIT, Action.DELETE));
-		resetCompanyList(new CompanyDAO());
-		companiesTable.getSelectionModel().selectedItemProperty()
-				.addListener((observable, oldValue, newValue) -> loadCompanyDetails(newValue));
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void loadCompanyDetails(Company company) {
-		CompanyDAO companyDAO = new CompanyDAO();
-
+		
 		groupNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
-						cellData.getValue().getName()));
+				cellData.getValue().getName()));
 
 		groupActionColumn.setCellFactory(generateCellFactory(groupsTable,
 				Action.EDIT, Action.DELETE));
-
+		
+		companiesTable.getSelectionModel().selectedItemProperty()
+				.addListener((observable, oldValue, newValue) -> loadCompanyDetails(newValue));
+		
+		resetTableView();
+	}
+	
+	private void loadCompanyDetails(Company company) {
 		groupsTable.setItems(FXCollections.observableArrayList(companyDAO
 				.findAllGroupsForCompany(company)));
 	}
 	
-	private void resetCompanyList(CompanyDAO companyDAO){
+	private void resetTableView(){
 		companiesTable.setItems(FXCollections.observableArrayList(companyDAO
 				.findAllCompanies()));
 	}
@@ -81,44 +84,13 @@ public class CompanyController extends TableViewController{
 	@FXML
 	private void handleAdd() {
 		Company company = new Company();
-	    boolean saveClicked = showCompanyDialog(company);
+	    boolean saveClicked = new CompanyDialogController().show(company);
 	    if (saveClicked) {
-	        CompanyDAO companyDAO = new CompanyDAO();
 	        companyDAO.saveOrUpdate(company);
-	        resetCompanyList(companyDAO);
+	        resetTableView();
 	    }
 	}
 	
-	public boolean showCompanyDialog(Company company) {
-	    try {
-	        // Load the fxml file and create a new stage for the popup dialog.
-	        FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(getClass().getResource("CompanyDialog.fxml"));
-	        AnchorPane page = (AnchorPane) loader.load();
-
-	        // Create the dialog Stage.
-	        Stage dialogStage = new Stage();
-	        dialogStage.setTitle("Edit Company");
-	        dialogStage.initModality(Modality.WINDOW_MODAL);
-	        dialogStage.initOwner(MainLayout.getPrimaryStage());
-	        Scene scene = new Scene(page);
-	        dialogStage.setScene(scene);
-
-	        // Set the company into the controller.
-	        CompanyDialogController controller = loader.getController();
-	        controller.setDialogStage(dialogStage);
-	        controller.setCompany(company);
-
-	        // Show the dialog and wait until the user closes it
-	        dialogStage.showAndWait();
-
-	        return controller.isSaveClicked();
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        return false;
-	    }
-	}
-
 	@Override
 	public TableView<? extends IRecord> getTableView() {
 		return companiesTable;
@@ -127,15 +99,32 @@ public class CompanyController extends TableViewController{
 	@Override
 	protected void deleteRecord(IRecord record) {
 		super.deleteRecord(record);
-		Company company = (Company) record;
-		System.out.println("pls dont delete company " + company.getName());
+		Optional<ButtonType> result = new AlertDialog(AlertType.CONFIRMATION, "Confirmation Dialog",
+				"Are you sure you want to delete this record?", null).showAndWait();
+		
+		if(result.get() == ButtonType.OK){
+			try {
+				companyDAO.delete(record);
+				resetTableView();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override
 	protected void editRecord(IRecord record) {
 		super.editRecord(record);
-		Company company = (Company) record;
-		System.out.println("pls dont edit company " + company.getName());
+		
+		if(record instanceof Company){
+			Company company = (Company) record;
+			System.out.println("pls dont edit company " + company.getName());
+		} else if(record instanceof Group){
+			Group group = (Group) record;
+			System.out.println("pls dont edit group " + group.getName());
+		}
+		
+		
 	}
 	
 }

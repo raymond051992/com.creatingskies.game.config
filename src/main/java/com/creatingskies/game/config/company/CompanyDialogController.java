@@ -1,15 +1,22 @@
 package com.creatingskies.game.config.company;
 
+import java.io.IOException;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import com.creatingskies.game.classes.TableViewController;
 import com.creatingskies.game.common.AlertDialog;
+import com.creatingskies.game.common.MainLayout;
 import com.creatingskies.game.model.IRecord;
 import com.creatingskies.game.model.company.Company;
 import com.creatingskies.game.model.company.Group;
@@ -26,6 +33,31 @@ public class CompanyDialogController extends TableViewController {
 	private Stage dialogStage;
 	private Company company;
 	private boolean saveClicked = false;
+	
+	public boolean show(Company company) {
+	    try {
+	        FXMLLoader loader = new FXMLLoader();
+	        loader.setLocation(getClass().getResource("CompanyDialog.fxml"));
+	        AnchorPane page = (AnchorPane) loader.load();
+
+	        Stage dialogStage = new Stage();
+	        dialogStage.setTitle("Company");
+	        dialogStage.initModality(Modality.WINDOW_MODAL);
+	        dialogStage.initOwner(MainLayout.getPrimaryStage());
+	        Scene scene = new Scene(page);
+	        dialogStage.setScene(scene);
+
+	        CompanyDialogController controller = loader.getController();
+	        controller.setDialogStage(dialogStage);
+	        controller.setCompany(company);
+
+	        dialogStage.showAndWait();
+	        return controller.isSaveClicked();
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return false;
+	    }
+	}
 	
 	@Override
 	protected String getViewTitle() {
