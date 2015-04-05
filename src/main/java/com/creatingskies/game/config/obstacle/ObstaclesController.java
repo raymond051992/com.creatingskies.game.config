@@ -7,15 +7,16 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 
 import com.creatingskies.game.classes.TableViewController;
 import com.creatingskies.game.common.AlertDialog;
 import com.creatingskies.game.common.MainLayout;
+import com.creatingskies.game.core.Game.Type;
 import com.creatingskies.game.model.IRecord;
 import com.creatingskies.game.model.obstacle.Obstacle;
 import com.creatingskies.game.model.obstacle.ObstacleDAO;
@@ -55,11 +56,24 @@ public class ObstaclesController extends TableViewController{
 						.getValue().getDifficulty().toString() : null));
 		
 		gameTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
-				cellData.getValue().getGameType() != null ? cellData
-						.getValue().getGameType().toString() : null));
+						getGameTypeDisplay(cellData.getValue())));
 		
 		actionColumn.setCellFactory(generateCellFactory(Action.EDIT, Action.DELETE));
 		resetTableView();
+	}
+	
+	private String getGameTypeDisplay(Obstacle obstacle){
+		String displayString = "";
+		
+		if(obstacle.getForRowing()){
+			displayString += Type.ROWING.toString() + ". ";
+		}
+		
+		if(obstacle.getForCycling()){
+			displayString += Type.CYCLING.toString() + ". ";
+		}
+		
+		return displayString;
 	}
 	
 	private void resetTableView(){
@@ -101,11 +115,11 @@ public class ObstaclesController extends TableViewController{
 
 	@Override
 	protected void deleteRecord(IRecord record) {
-		super.deleteRecord(record);
 		Optional<ButtonType> result = new AlertDialog(AlertType.CONFIRMATION, "Confirmation Dialog",
 				"Are you sure you want to delete this obstacle?", null).showAndWait();
 		
 		if(result.get() == ButtonType.OK){
+			super.deleteRecord(record);
 			try {
 				obstacleDAO.delete(record);
 				resetTableView();

@@ -3,12 +3,12 @@ package com.creatingskies.game.config.obstacle;
 import java.io.File;
 import java.io.IOException;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -19,18 +19,20 @@ import javafx.stage.Stage;
 import com.creatingskies.game.classes.ViewController;
 import com.creatingskies.game.common.AlertDialog;
 import com.creatingskies.game.common.MainLayout;
-import com.creatingskies.game.core.Game.Type;
 import com.creatingskies.game.model.obstacle.Obstacle;
 
 public class ObstacleDialogController extends ViewController {
 
 	@FXML private TextField nameField;
-	@FXML private ChoiceBox<Type> gameTypeChoices;
+	@FXML private CheckBox forRowingCheckBox;
+	@FXML private CheckBox forCyclingCheckBox;
 	@FXML private Slider slider;
+	@FXML private Label fileNameLabel;
 	
 	private Stage dialogStage;
 	private Obstacle obstacle;
 	private boolean saveClicked = false;
+	private final String NO_FILE_MESSAGE = "Please choose a file.";
 	
 	public boolean show(Obstacle obstacle) {
 	    try {
@@ -59,14 +61,18 @@ public class ObstacleDialogController extends ViewController {
 	
 	public void initialize() {
 		super.init();
-		
-		gameTypeChoices.setItems(FXCollections
-				.observableArrayList(Type.values()));
-		
+		initializeSlider();
+		fileNameLabel.setText(NO_FILE_MESSAGE);
+	}
+	
+	private void initializeSlider(){
 		slider.setShowTickLabels(true);
-		slider.setShowTickMarks(true);
-		slider.setMin(0);
+		slider.setSnapToTicks(true);
+		
 		slider.setMajorTickUnit(1);
+		slider.setMinorTickCount(0);
+		
+		slider.setMin(0);
 		slider.setMax(7);
 	}
 
@@ -77,9 +83,8 @@ public class ObstacleDialogController extends ViewController {
         slider.setValue(obstacle.getDifficulty() != null ?
         		obstacle.getDifficulty() : 0.0);
         
-        if(obstacle.getGameType() != null){
-        	gameTypeChoices.setValue(obstacle.getGameType());
-        }
+        forRowingCheckBox.setSelected(obstacle.getForRowing());
+        forCyclingCheckBox.setSelected(obstacle.getForCycling());
     }
 	
 	public void setDialogStage(Stage dialogStage) {
@@ -104,11 +109,11 @@ public class ObstacleDialogController extends ViewController {
         fileChooser.getExtensionFilters().add(extFilter);
 
         File file = fileChooser.showOpenDialog(MainLayout.getPrimaryStage());
-
-        if (file != null) {
-            new AlertDialog(AlertType.INFORMATION, "Todo!", "Todo: Under construction.",
-            		file.getAbsolutePath()).show();;
-        }
+        obstacle.setImage(file);
+        
+        fileNameLabel.setText(obstacle.getImageFileName() != null
+        		&& !obstacle.getImageFileName().equals("") ?
+        		obstacle.getImageFileName() : NO_FILE_MESSAGE);
 	}
 	
 	@FXML
@@ -116,7 +121,8 @@ public class ObstacleDialogController extends ViewController {
         if (isInputValid()) {
             obstacle.setName(nameField.getText());
             obstacle.setDifficulty((int) slider.getValue());
-            obstacle.setGameType(gameTypeChoices.getValue());
+            obstacle.setForRowing(forRowingCheckBox.isSelected());
+            obstacle.setForCycling(forCyclingCheckBox.isSelected());
             saveClicked = true;
             dialogStage.close();
         }
@@ -128,12 +134,18 @@ public class ObstacleDialogController extends ViewController {
     }
     
     private boolean isInputValid() {
-    	//TODO Add validation
-    	
         String errorMessage = "";
 
         if (nameField.getText() == null || nameField.getText().length() == 0) {
-            errorMessage += "No obstacle name!\n"; 
+            errorMessage += "Obstacle name is required.\n"; 
+        }
+        
+        if (!forRowingCheckBox.isSelected() && !forCyclingCheckBox.isSelected()){
+        	errorMessage += "At least one game type should be selected.\n";
+        }
+        
+        if(fileNameLabel.getText().equals(NO_FILE_MESSAGE)){
+        	errorMessage += "Image for obstacle is required.\n";
         }
 
         if (errorMessage.length() == 0) {
