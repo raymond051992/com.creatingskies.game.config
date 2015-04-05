@@ -56,7 +56,7 @@ public class ObstaclesController extends TableViewController{
 		
 		gameTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
 				cellData.getValue().getGameType() != null ? cellData
-						.getValue().getGameType().getName() : null));
+						.getValue().getGameType().toString() : null));
 		
 		actionColumn.setCellFactory(generateCellFactory(Action.EDIT, Action.DELETE));
 		resetTableView();

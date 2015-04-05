@@ -15,22 +15,18 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 
 import com.creatingskies.game.classes.ViewController;
 import com.creatingskies.game.common.AlertDialog;
 import com.creatingskies.game.common.MainLayout;
+import com.creatingskies.game.core.Game.Type;
 import com.creatingskies.game.model.obstacle.Obstacle;
-import com.creatingskies.game.model.type.GameType;
-import com.creatingskies.game.model.type.GameTypeDAO;
 
 public class ObstacleDialogController extends ViewController {
 
 	@FXML private TextField nameField;
-	@FXML private ChoiceBox<GameType> gameTypeChoices;
+	@FXML private ChoiceBox<Type> gameTypeChoices;
 	@FXML private Slider slider;
-	
-	private GameTypeDAO gameTypeDAO;
 	
 	private Stage dialogStage;
 	private Obstacle obstacle;
@@ -64,22 +60,9 @@ public class ObstacleDialogController extends ViewController {
 	@Override
 	public void initialize() {
 		super.initialize();
-		gameTypeDAO = new GameTypeDAO();
-		
-		gameTypeChoices.setConverter(new StringConverter<GameType>() {
-			@Override
-			public String toString(GameType object) {
-				return object.getName();
-			}
-			
-			@Override
-			public GameType fromString(String name) {
-				return gameTypeDAO.findGameTypeByName(name);
-			}
-		});
 		
 		gameTypeChoices.setItems(FXCollections
-				.observableArrayList(gameTypeDAO.findAll()));
+				.observableArrayList(Type.values()));
 		
 		slider.setShowTickLabels(true);
 		slider.setShowTickMarks(true);
