@@ -52,7 +52,7 @@ public class CompanyController extends TableViewController{
 	@FXML
 	@SuppressWarnings("unchecked")
 	public void initialize(){
-		super.initialize();
+		super.init();
 		companyDAO = new CompanyDAO();
 		
 		companyNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(

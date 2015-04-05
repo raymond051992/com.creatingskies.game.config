@@ -44,7 +44,7 @@ public class UsersController extends TableViewController {
 	@FXML
 	@SuppressWarnings("unchecked")
 	public void initialize(){
-		super.initialize();
+		super.init();
 		UserDao userDao = new UserDao();
 		
 		firstNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));

@@ -64,10 +64,9 @@ public class CompanyDialogController extends TableViewController {
 		return "Companies";
 	}
 	
-	@Override
 	@SuppressWarnings("unchecked")
 	public void initialize() {
-		super.initialize();
+		super.init();
 		groupNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
 				cellData.getValue().getName()));
 		groupActionColumn.setCellFactory(generateCellFactory(Action.DELETE));

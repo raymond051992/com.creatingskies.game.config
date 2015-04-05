@@ -44,7 +44,7 @@ public class ObstaclesController extends TableViewController{
 	@FXML
 	@SuppressWarnings("unchecked")
 	public void initialize(){
-		super.initialize();
+		super.init();
 		obstacleDAO = new ObstacleDAO();
 		
 		nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(

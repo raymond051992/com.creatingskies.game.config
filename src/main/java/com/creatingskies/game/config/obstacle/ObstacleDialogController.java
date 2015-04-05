@@ -57,9 +57,8 @@ public class ObstacleDialogController extends ViewController {
 	    }
 	}
 	
-	@Override
 	public void initialize() {
-		super.initialize();
+		super.init();
 		
 		gameTypeChoices.setItems(FXCollections
 				.observableArrayList(Type.values()));
