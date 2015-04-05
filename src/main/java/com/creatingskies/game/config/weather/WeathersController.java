@@ -7,10 +7,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 
 import com.creatingskies.game.classes.TableViewController;
@@ -54,7 +54,8 @@ public class WeathersController extends TableViewController {
 		gameTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
 				getGameTypeDisplay(cellData.getValue())));
 		
-		audioColumn.setCellValueFactory(cellData -> new SimpleStringProperty("Todo!"));
+		audioColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
+				cellData.getValue().getAudioFileName()));
 		
 		difficultyColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
 				cellData.getValue().getDifficulty() != null ? cellData
@@ -86,7 +87,7 @@ public class WeathersController extends TableViewController {
 	
 	@FXML
 	private void handleAdd() {
-		showDetailDialog(new Weather());
+		new WeatherPropertiesController().show(Action.ADD, new Weather());
 	}
 
 	@Override
@@ -94,12 +95,8 @@ public class WeathersController extends TableViewController {
 		super.editRecord(record);
 		
 		if(record instanceof Weather){
-			showDetailDialog((Weather) record);
+			new WeatherPropertiesController().show(Action.ADD, (Weather) record);
 		}
-	}
-	
-	private void showDetailDialog(Weather weather){
-
 	}
 	
 	@Override

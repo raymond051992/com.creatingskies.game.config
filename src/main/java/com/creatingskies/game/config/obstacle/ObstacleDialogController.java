@@ -16,6 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import com.creatingskies.game.classes.Util;
 import com.creatingskies.game.classes.ViewController;
 import com.creatingskies.game.common.AlertDialog;
 import com.creatingskies.game.common.MainLayout;
@@ -61,21 +62,9 @@ public class ObstacleDialogController extends ViewController {
 	
 	public void initialize() {
 		super.init();
-		initializeSlider();
 		fileNameLabel.setText(NO_FILE_MESSAGE);
 	}
 	
-	private void initializeSlider(){
-		slider.setShowTickLabels(true);
-		slider.setSnapToTicks(true);
-		
-		slider.setMajorTickUnit(1);
-		slider.setMinorTickCount(0);
-		
-		slider.setMin(0);
-		slider.setMax(7);
-	}
-
 	public void setObstacle(Obstacle obstacle) {
         this.obstacle = obstacle;
         nameField.setText(obstacle.getName());
@@ -109,7 +98,11 @@ public class ObstacleDialogController extends ViewController {
         fileChooser.getExtensionFilters().add(extFilter);
 
         File file = fileChooser.showOpenDialog(MainLayout.getPrimaryStage());
-        obstacle.setImage(file);
+        
+        obstacle.setImage(Util.fileToByteArray(file));
+        obstacle.setImageFileName(file != null ? file.getName() : null);
+		obstacle.setImageFileType(Util.getFileExtension(obstacle
+				.getImageFileName()));
         
         fileNameLabel.setText(obstacle.getImageFileName() != null
         		&& !obstacle.getImageFileName().equals("") ?
