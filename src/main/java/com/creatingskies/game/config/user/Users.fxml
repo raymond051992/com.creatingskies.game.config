@@ -23,9 +23,10 @@
             <ComboBox prefWidth="230.0" GridPane.columnIndex="1" />
             <ComboBox prefWidth="230.0" GridPane.columnIndex="3" />
             <Label text="Status" GridPane.columnIndex="2" />
-            <Button mnemonicParsing="false" styleClass="button-primary" text="Filter" GridPane.columnIndex="4" />
+            <Button mnemonicParsing="false" styleClass="button-default" text="Filter" GridPane.columnIndex="4" />
          </children>
       </GridPane>
+      <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#createNew" styleClass="button-default" text="Add" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
       <TableView fx:id="usersTable" layoutY="40.0" prefHeight="200.0" prefWidth="793.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
         <columns>
           <TableColumn fx:id="firstNameColumn" prefWidth="75.0" text="First Name" />

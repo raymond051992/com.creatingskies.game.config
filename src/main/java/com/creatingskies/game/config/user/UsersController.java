@@ -55,6 +55,11 @@ public class UsersController extends TableViewController {
 		actionColumn.setCellFactory(generateCellFactory(Action.ACTIVATE, Action.EDIT, Action.VIEW));
 		usersTable.setItems(FXCollections.observableArrayList(userDao.findAll()));
 	}
+	
+	@FXML
+	private void createNew(){
+		new UserPropertiesController().show(Action.ADD, new User());
+	}
 
 	@Override
 	public TableView<? extends IRecord> getTableView() {
