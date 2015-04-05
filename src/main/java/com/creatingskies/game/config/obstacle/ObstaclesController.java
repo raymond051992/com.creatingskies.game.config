@@ -27,6 +27,7 @@ public class ObstaclesController extends TableViewController{
 	@FXML private TableColumn<Obstacle, String> nameColumn;
 	@FXML private TableColumn<Obstacle, String> difficultyColumn;
 	@FXML private TableColumn<Obstacle, String> gameTypeColumn;
+	@FXML private TableColumn<Obstacle, String> imageColumn;
 	@FXML private TableColumn<Obstacle, Object> actionColumn;
 	
 	private ObstacleDAO obstacleDAO;
@@ -57,6 +58,9 @@ public class ObstaclesController extends TableViewController{
 		
 		gameTypeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
 						getGameTypeDisplay(cellData.getValue())));
+		
+		imageColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
+				cellData.getValue().getImageFileName()));
 		
 		actionColumn.setCellFactory(generateCellFactory(Action.EDIT, Action.DELETE));
 		resetTableView();

@@ -69,9 +69,9 @@ public class UserPropertiesController extends PropertiesViewController{
 		if(getCurrentAction() == Action.ADD){
 			return "Create New User";
 		} else if (getCurrentAction() == Action.EDIT) {
-			return "Edit User " + getUser().getDisplayString();
+			return "Edit User " + getUser().getFullName();
 		} else {
-			return "User " + getUser().getDisplayString();
+			return "User " + getUser().getFullName();
 		}
 	}
 	
@@ -82,13 +82,36 @@ public class UserPropertiesController extends PropertiesViewController{
             AnchorPane pane = (AnchorPane) loader.load();
             
             UserPropertiesController controller = (UserPropertiesController) loader.getController();
-            controller.setCurrentAction(action);
-            controller.setCurrentRecord(user);
+            controller.setUser(action, user);
             controller.init();
             MainLayout.getRootLayout().setCenter(pane);
         } catch (IOException e) {
             e.printStackTrace();
         }
+	}
+	
+	private void setUser(Action action, User user){
+		setCurrentAction(action);
+		setCurrentRecord(user);
+		
+		firstNameTextField.setText(user.getFirstName());
+		lastNameTextField.setText(user.getLastName());
+		userNameTextField.setText(user.getUsername());
+		
+		passwordField.setText(user.getPassword());
+		confirmPasswordField.setText(user.getPassword());
+		securityAnswerField.setText(user.getSecurityQuestionAnswer());
+		
+		statusChoices.setValue(user.getStatus());
+		typeChoices.setValue(user.getType());
+		questionChoices.setValue(user.getSecurityQuestion());
+		
+		if(action.equals(Action.EDIT)){
+			userNameTextField.setEditable(false);
+			passwordField.setEditable(false);
+			confirmPasswordField.setEditable(false);
+			securityAnswerField.setEditable(false);
+		}
 	}
 	
 	@FXML

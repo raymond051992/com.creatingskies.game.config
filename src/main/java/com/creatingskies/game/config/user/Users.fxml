@@ -20,10 +20,10 @@
         </rowConstraints>
          <children>
             <Label text="Type" />
-            <ComboBox prefWidth="230.0" GridPane.columnIndex="1" />
-            <ComboBox prefWidth="230.0" GridPane.columnIndex="3" />
             <Label text="Status" GridPane.columnIndex="2" />
-            <Button mnemonicParsing="false" styleClass="button-default" text="Filter" GridPane.columnIndex="4" />
+            <Button mnemonicParsing="false" onAction="#handleFilter" styleClass="button-default" text="Filter" GridPane.columnIndex="4" />
+            <ChoiceBox fx:id="typeChoices" prefWidth="230.0" GridPane.columnIndex="1" />
+            <ChoiceBox fx:id="statusChoices" prefWidth="230.0" GridPane.columnIndex="3" />
          </children>
       </GridPane>
       <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#createNew" styleClass="button-default" text="Add" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
@@ -33,6 +33,7 @@
           <TableColumn fx:id="lastNameColumn" prefWidth="75.0" text="Last Name" />
             <TableColumn fx:id="usernameColumn" prefWidth="75.0" text="Username" />
             <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Type" />
+            <TableColumn fx:id="statusColumn" prefWidth="75.0" text="Status" />
             <TableColumn fx:id="actionColumn" maxWidth="120.0" minWidth="120.0" prefWidth="120.0" />
         </columns>
          <columnResizePolicy>

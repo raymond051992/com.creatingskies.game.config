@@ -8,7 +8,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -27,8 +26,8 @@ public class ObstacleDialogController extends ViewController {
 	@FXML private TextField nameField;
 	@FXML private CheckBox forRowingCheckBox;
 	@FXML private CheckBox forCyclingCheckBox;
-	@FXML private Slider slider;
-	@FXML private Label fileNameLabel;
+	@FXML private Slider difficultySlider;
+	@FXML private TextField fileNameField;
 	
 	private Stage dialogStage;
 	private Obstacle obstacle;
@@ -62,18 +61,22 @@ public class ObstacleDialogController extends ViewController {
 	
 	public void initialize() {
 		super.init();
-		fileNameLabel.setText(NO_FILE_MESSAGE);
+		fileNameField.setText(NO_FILE_MESSAGE);
 	}
 	
 	public void setObstacle(Obstacle obstacle) {
         this.obstacle = obstacle;
         nameField.setText(obstacle.getName());
         
-        slider.setValue(obstacle.getDifficulty() != null ?
+        difficultySlider.setValue(obstacle.getDifficulty() != null ?
         		obstacle.getDifficulty() : 0.0);
         
         forRowingCheckBox.setSelected(obstacle.getForRowing());
         forCyclingCheckBox.setSelected(obstacle.getForCycling());
+        
+        fileNameField.setText(obstacle.getImageFileName() != null
+        		&& !obstacle.getImageFileName().equals("") ?
+        		obstacle.getImageFileName() : NO_FILE_MESSAGE);
     }
 	
 	public void setDialogStage(Stage dialogStage) {
@@ -104,7 +107,7 @@ public class ObstacleDialogController extends ViewController {
 		obstacle.setImageFileType(Util.getFileExtension(obstacle
 				.getImageFileName()));
         
-        fileNameLabel.setText(obstacle.getImageFileName() != null
+		fileNameField.setText(obstacle.getImageFileName() != null
         		&& !obstacle.getImageFileName().equals("") ?
         		obstacle.getImageFileName() : NO_FILE_MESSAGE);
 	}
@@ -113,7 +116,7 @@ public class ObstacleDialogController extends ViewController {
     private void handleSave() {
         if (isInputValid()) {
             obstacle.setName(nameField.getText());
-            obstacle.setDifficulty((int) slider.getValue());
+            obstacle.setDifficulty((int) difficultySlider.getValue());
             obstacle.setForRowing(forRowingCheckBox.isSelected());
             obstacle.setForCycling(forCyclingCheckBox.isSelected());
             saveClicked = true;
@@ -137,7 +140,7 @@ public class ObstacleDialogController extends ViewController {
         	errorMessage += "At least one game type should be selected.\n";
         }
         
-        if(fileNameLabel.getText().equals(NO_FILE_MESSAGE)){
+        if(fileNameField.getText().equals(NO_FILE_MESSAGE)){
         	errorMessage += "Image for obstacle is required.\n";
         }
 

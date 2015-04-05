@@ -39,12 +39,31 @@ public class WeatherPropertiesController extends PropertiesViewController{
 			WeatherPropertiesController controller = (WeatherPropertiesController) loader
 					.getController();
             controller.setCurrentAction(action);
-            controller.setCurrentRecord(weather);
+            controller.setWeather(weather);
             controller.init();
             MainLayout.getRootLayout().setCenter(pane);
         } catch (IOException e) {
             e.printStackTrace();
         }
+	}
+	
+	private void setWeather(Weather weather){
+		setCurrentRecord(weather);
+		nameField.setText(weather.getName());
+        
+        difficultySlider.setValue(weather.getDifficulty() != null ?
+        		weather.getDifficulty() : 0.0);
+        
+        forRowingCheckBox.setSelected(weather.getForRowing());
+        forCyclingCheckBox.setSelected(weather.getForCycling());
+        
+        imageFileNameField.setText(weather.getImageFileName() != null
+        		&& !weather.getImageFileName().equals("") ?
+        				weather.getImageFileName() : NO_FILE_MESSAGE);
+        
+        audioFileNameField.setText(weather.getAudioFileName() != null
+        		&& !weather.getAudioFileName().equals("") ?
+        				weather.getAudioFileName() : NO_FILE_MESSAGE);
 	}
 	
 	@Override
