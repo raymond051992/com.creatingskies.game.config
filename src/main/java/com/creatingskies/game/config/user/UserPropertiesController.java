@@ -13,7 +13,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.StringConverter;
 
 import com.creatingskies.game.classes.PropertiesViewController;
-import com.creatingskies.game.classes.TableViewController.Action;
 import com.creatingskies.game.common.AlertDialog;
 import com.creatingskies.game.common.MainLayout;
 import com.creatingskies.game.model.user.SecurityQuestion;
