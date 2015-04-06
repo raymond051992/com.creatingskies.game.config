@@ -97,7 +97,7 @@ public class ObstaclesController extends TableViewController{
 	
 	@FXML
 	private void handleAdd() {
-		showDetailDialog(new Obstacle());
+		new ObstaclePropertiesController().show(Action.ADD, new Obstacle());
 	}
 
 	@Override
@@ -105,18 +105,10 @@ public class ObstaclesController extends TableViewController{
 		super.editRecord(record);
 		
 		if(record instanceof Obstacle){
-			showDetailDialog((Obstacle) record);
+			new ObstaclePropertiesController().show(Action.ADD, (Obstacle) record);
 		}
 	}
 	
-	private void showDetailDialog(Obstacle obstacle){
-		boolean saveClicked = new ObstacleDialogController().show(obstacle);
-	    if (saveClicked) {
-	        obstacleDAO.saveOrUpdate(obstacle);
-	        resetTableView();
-	    }
-	}
-
 	@Override
 	protected void deleteRecord(IRecord record) {
 		Optional<ButtonType> result = new AlertDialog(AlertType.CONFIRMATION, "Confirmation Dialog",

@@ -69,8 +69,6 @@ public class WeatherPropertiesController extends PropertiesViewController{
 	@Override
 	public void init() {
 		super.init();
-		imageFileNameField.setText(NO_FILE_MESSAGE);
-		audioFileNameField.setText(NO_FILE_MESSAGE);
 	}
 	
 	@FXML
