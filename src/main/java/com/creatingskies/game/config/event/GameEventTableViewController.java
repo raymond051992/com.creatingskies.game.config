@@ -74,16 +74,19 @@ public class GameEventTableViewController extends TableViewController{
 	
 	@FXML
 	private void addRecord(){
+		close();
 		new GameEventPropertiesViewController().show(Action.ADD, new GameEvent());
 	}
 	
 	@Override
 	protected void viewRecord(IRecord record) {
+		close();
 		new GameEventPropertiesViewController().show(Action.VIEW, (GameEvent) record);
 	}
 	
 	@Override
 	protected void editRecord(IRecord record) {
+		close();
 		new GameEventPropertiesViewController().show(Action.EDIT, (GameEvent) record);
 	}
 	

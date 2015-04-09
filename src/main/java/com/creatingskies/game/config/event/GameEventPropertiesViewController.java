@@ -25,6 +25,7 @@ import com.creatingskies.game.common.AlertDialog;
 import com.creatingskies.game.common.MainLayout;
 import com.creatingskies.game.core.Game;
 import com.creatingskies.game.core.GameConverter;
+import com.creatingskies.game.core.GameCoreController;
 import com.creatingskies.game.core.GameDao;
 import com.creatingskies.game.model.company.Company;
 import com.creatingskies.game.model.company.CompanyConverter;
@@ -42,6 +43,7 @@ public class GameEventPropertiesViewController extends PropertiesViewController{
 	@FXML private Button saveButton;
 	@FXML private Button cancelButton;
 	@FXML private Button backToListButton;
+	@FXML private Button playButton;
 	
 	public void init(){
 		super.init();
@@ -115,27 +117,18 @@ public class GameEventPropertiesViewController extends PropertiesViewController{
 	}
 	
 	private void disableFields(){
-		if(getCurrentAction() == Action.VIEW){
-			companyComboBox.setDisable(true);
-			gameComboBox.setDisable(true);
-			eventDatePicker.setDisable(true);
-			hourChoiceBox.setDisable(true);
-			minuteChoiceBox.setDisable(true);
-			
-			saveButton.setVisible(false);
-			cancelButton.setVisible(false);
-			backToListButton.setVisible(true);
-		}else{
-			companyComboBox.setDisable(false);
-			gameComboBox.setDisable(false);
-			eventDatePicker.setDisable(false);
-			hourChoiceBox.setDisable(false);
-			minuteChoiceBox.setDisable(false);
-			
-			saveButton.setVisible(true);
-			cancelButton.setVisible(true);
-			backToListButton.setVisible(false);
-		}
+		boolean isViewAction = getCurrentAction() == Action.VIEW;
+		
+		companyComboBox.setDisable(isViewAction);
+		gameComboBox.setDisable(isViewAction);
+		eventDatePicker.setDisable(isViewAction);
+		hourChoiceBox.setDisable(isViewAction);
+		minuteChoiceBox.setDisable(isViewAction);
+		
+		saveButton.setVisible(!isViewAction);
+		cancelButton.setVisible(!isViewAction);
+		backToListButton.setVisible(isViewAction);
+		playButton.setVisible(isViewAction);
 	}
 	
 	@FXML
@@ -159,6 +152,11 @@ public class GameEventPropertiesViewController extends PropertiesViewController{
 	private void backToList(){
 		close();
 		new GameEventTableViewController().show();
+	}
+	
+	@FXML
+	private void play(){
+		new GameCoreController().show(getGameEvent());
 	}
 	
 	private boolean isValid(){

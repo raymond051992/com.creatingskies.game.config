@@ -52,7 +52,12 @@
                         <Button fx:id="cancelButton" maxWidth="100.0" minWidth="100.0" mnemonicParsing="false" onAction="#cancel" prefWidth="100.0" text="Cancel" />
                      </children>
                   </HBox>
-                  <Button fx:id="backToListButton" maxWidth="141.0" minWidth="100.0" mnemonicParsing="false" onAction="#backToList" prefHeight="25.0" prefWidth="141.0" text="Back To List" />
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                     <children>
+                        <Button fx:id="backToListButton" maxWidth="100.0" minWidth="100.0" mnemonicParsing="false" onAction="#backToList" prefHeight="25.0" prefWidth="100.0" text="Back" />
+                        <Button fx:id="playButton" maxWidth="100.0" minWidth="100.0" mnemonicParsing="false" onAction="#play" prefWidth="100.0" text="Play" />
+                     </children>
+                  </HBox>
                </children>
                <VBox.margin>
                   <Insets top="20.0" />
