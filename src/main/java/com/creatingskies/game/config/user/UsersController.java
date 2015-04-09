@@ -67,8 +67,12 @@ public class UsersController extends TableViewController {
 		statusColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
 				cellData.getValue().getStatus().toString()));
 		
-		typeChoices.setItems(FXCollections.observableArrayList(Type.values()));
-		statusChoices.setItems(FXCollections.observableArrayList(Status.values()));
+		
+		typeChoices.getItems().add(null);
+		typeChoices.getItems().addAll(FXCollections.observableArrayList(Type.values()));
+		
+		statusChoices.getItems().add(null);
+		statusChoices.getItems().addAll(FXCollections.observableArrayList(Status.values()));
 		
 		typeChoices.getSelectionModel().selectFirst();
 		statusChoices.getSelectionModel().selectFirst();
@@ -79,8 +83,7 @@ public class UsersController extends TableViewController {
 	}
 	
 	private void resetTableView(){
-		usersTable.setItems(FXCollections.observableArrayList(new UserDao()
-		.findAll()));
+		resetTableView(null, null);
 	}
 	
 	private void resetTableView(Type type, Status status){
@@ -100,12 +103,11 @@ public class UsersController extends TableViewController {
 	
 	@Override
 	protected void viewRecord(IRecord record) {
-		super.viewRecord(record);
+		new UserPropertiesController().show(Action.VIEW, (User) record);
 	}
 	
 	@Override
 	protected void editRecord(IRecord record) {
-		super.editRecord(record);
 		new UserPropertiesController().show(Action.EDIT, (User) record);
 	}
 	

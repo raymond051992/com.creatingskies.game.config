@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -35,8 +36,42 @@ public class UserPropertiesController extends PropertiesViewController{
 	@FXML ChoiceBox<Type> typeChoices;
 	@FXML ChoiceBox<SecurityQuestion> questionChoices;
 	
+	@FXML Button backToListButton;
+	@FXML Button saveButton;
+	@FXML Button cancelButton;
+	
 	private User getUser(){
 		return (User) getCurrentRecord();
+	}
+	
+	private void initFields(){
+		if(getCurrentAction() == Action.VIEW){
+			firstNameTextField.setEditable(false);
+			lastNameTextField.setEditable(false);
+			userNameTextField.setEditable(false);
+			passwordField.setEditable(false);
+			confirmPasswordField.setEditable(false);
+			securityAnswerField.setEditable(false);
+			statusChoices.setDisable(true);
+			typeChoices.setDisable(true);
+			questionChoices.setDisable(true);
+			backToListButton.setVisible(true);
+			saveButton.setVisible(false);
+			cancelButton.setVisible(false);
+		}else{
+			firstNameTextField.setEditable(true);
+			lastNameTextField.setEditable(true);
+			userNameTextField.setEditable(true);
+			passwordField.setEditable(true);
+			confirmPasswordField.setEditable(true);
+			securityAnswerField.setEditable(true);
+			statusChoices.setDisable(false);
+			typeChoices.setDisable(false);
+			questionChoices.setDisable(false);
+			backToListButton.setVisible(false);
+			saveButton.setVisible(true);
+			cancelButton.setVisible(true);
+		}
 	}
 	
 	@Override
@@ -51,6 +86,9 @@ public class UserPropertiesController extends PropertiesViewController{
 		typeChoices.getSelectionModel().selectFirst();
 		questionChoices.getSelectionModel().selectFirst();
 		
+		typeChoices.setValue(getUser().getType());
+        statusChoices.setValue(getUser().getStatus());
+		
 		questionChoices.setConverter(new StringConverter<SecurityQuestion>() {
 			@Override
 			public String toString(SecurityQuestion object) {
@@ -62,6 +100,7 @@ public class UserPropertiesController extends PropertiesViewController{
 				return null;
 			}
 		});
+		initFields();
 	}
 	
 	@Override
@@ -84,6 +123,7 @@ public class UserPropertiesController extends PropertiesViewController{
             UserPropertiesController controller = (UserPropertiesController) loader.getController();
             controller.setUser(action, user);
             controller.init();
+            
             MainLayout.getRootLayout().setCenter(pane);
         } catch (IOException e) {
             e.printStackTrace();
@@ -133,6 +173,12 @@ public class UserPropertiesController extends PropertiesViewController{
     @FXML
     private void handleCancel() {
         new UsersController().show();
+    }
+    
+    @FXML
+    private void backToList(){
+    	close();
+    	new UsersController().show();
     }
     
     private boolean isInputValid() {
