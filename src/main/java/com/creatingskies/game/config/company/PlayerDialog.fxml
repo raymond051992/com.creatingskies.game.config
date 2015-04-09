@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="104.0" prefWidth="429.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.creatingskies.game.config.company.CompanyDialogController">
+<AnchorPane prefHeight="104.0" prefWidth="429.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.creatingskies.game.config.company.PlayerDialogController">
 	<children>
 				<ButtonBar layoutX="86.0" layoutY="74.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
 					<buttons>
@@ -23,8 +23,8 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Company Name" />
-            <TextField fx:id="companyNameField" GridPane.columnIndex="1" />
+            <Label text="Player Name" />
+            <TextField fx:id="playerNameField" GridPane.columnIndex="1" />
          </children>
       </GridPane>
 	</children>

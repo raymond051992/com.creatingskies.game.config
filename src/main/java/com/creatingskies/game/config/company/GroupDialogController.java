@@ -14,33 +14,33 @@ import javafx.stage.Stage;
 import com.creatingskies.game.classes.Util;
 import com.creatingskies.game.common.AlertDialog;
 import com.creatingskies.game.common.MainLayout;
-import com.creatingskies.game.model.company.Company;
 import com.creatingskies.game.model.company.CompanyDAO;
+import com.creatingskies.game.model.company.Group;
 
-public class CompanyDialogController  {
+public class GroupDialogController  {
 
-	@FXML private TextField companyNameField;
+	@FXML private TextField groupNameField;
 	
 	private Stage stage;
-	private Company company;
+	private Group group;
 	private boolean isSaveButtonClicked;
 	
-	public boolean show(Company company) {
+	public boolean show(Group group) {
 	    try {
 	        FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(getClass().getResource("CompanyDialog.fxml"));
+	        loader.setLocation(getClass().getResource("GroupDialog.fxml"));
 	        AnchorPane page = (AnchorPane) loader.load();
 
 	        stage = new Stage();
-	        stage.setTitle("Company");
+	        stage.setTitle("Group");
 	        stage.initModality(Modality.WINDOW_MODAL);
 	        stage.initOwner(MainLayout.getPrimaryStage());
 	        Scene scene = new Scene(page);
 	        stage.setScene(scene);
 
-	        CompanyDialogController controller = loader.getController();
+	        GroupDialogController controller = loader.getController();
 	        controller.setStage(stage);
-	        controller.setCompany(company);
+	        controller.setGroup(group);
 
 	        stage.showAndWait();
 	        return true;
@@ -50,9 +50,9 @@ public class CompanyDialogController  {
 	    }
 	}
 
-	public void setCompany(Company company) {
-        this.company = company;
-        companyNameField.setText(company.getName());
+	public void setGroup(Group group) {
+        this.group = group;
+        groupNameField.setText(group.getName());
     }
 	
 	public void setStage(Stage stage) {
@@ -63,8 +63,8 @@ public class CompanyDialogController  {
 	@FXML
     private void handleSave() {
         if (isInputValid()) {
-            company.setName(companyNameField.getText());
-            new CompanyDAO().saveOrUpdate(company);
+            group.setName(groupNameField.getText());
+            new CompanyDAO().saveOrUpdate(group);
             isSaveButtonClicked = true;
             stage.close();
         }
@@ -77,8 +77,8 @@ public class CompanyDialogController  {
     }
 
     private boolean isInputValid() {
-    	if(Util.isBlank(companyNameField.getText())){
-    		new AlertDialog(AlertType.ERROR, "Invalid Field", null, "Company name is required.", stage).showAndWait();
+    	if(Util.isBlank(groupNameField.getText())){
+    		new AlertDialog(AlertType.ERROR, "Invalid Field", null, "Group name is required.", stage).showAndWait();
     		return false;
     	}
     	return true;

@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -20,6 +21,8 @@ import com.creatingskies.game.model.IRecord;
 import com.creatingskies.game.model.company.Company;
 import com.creatingskies.game.model.company.CompanyDAO;
 import com.creatingskies.game.model.company.Group;
+import com.creatingskies.game.model.company.Player;
+import com.creatingskies.game.model.company.Team;
 
 public class CompanyController extends TableViewController{
 
@@ -31,7 +34,24 @@ public class CompanyController extends TableViewController{
 	@FXML private TableColumn<Group, String> groupNameColumn;
 	@FXML private TableColumn<Group, Object> groupActionColumn;
 	
+	@FXML private TableView<Team> teamsTable;
+	@FXML private TableColumn<Team, String> teamNameColumn;
+	@FXML private TableColumn<Team, Object> teamActionColumn;
+	
+	@FXML private TableView<Player> playersTable;
+	@FXML private TableColumn<Player, String> playerNameColumn;
+	@FXML private TableColumn<Player, Object> playerActionColumn;
+	
+	@FXML private Button addGroupButton;
+	@FXML private Button addTeamButton;
+	@FXML private Button addPlayerButton;
+	
 	private CompanyDAO companyDAO;
+	
+	private Company selectedCompany;
+	private Group selectedGroup;
+	private Team selectedTeam;
+	private Player selectedPlayer;
 	
 	@Override
 	protected String getViewTitle() {
@@ -72,8 +92,8 @@ public class CompanyController extends TableViewController{
 	}
 	
 	private void loadCompanyDetails(Company company) {
-		groupsTable.setItems(FXCollections.observableArrayList(companyDAO
-				.findAllGroupsForCompany(company)));
+		selectedCompany = company;
+		resetGroupTableView();
 	}
 	
 	private void resetTableView(){
@@ -81,14 +101,38 @@ public class CompanyController extends TableViewController{
 				.findAllCompanies()));
 	}
 	
+	private void resetGroupTableView(){
+		groupsTable.setItems(FXCollections.observableArrayList(
+				companyDAO.findAllGroupsForCompany(selectedCompany)));
+	}
+	
+	private void resetTeamTableView(){
+		
+	}
+	
 	@FXML
 	private void handleAdd() {
-		Company company = new Company();
-	    boolean saveClicked = new CompanyDialogController().show(company);
-	    if (saveClicked) {
-	        companyDAO.saveOrUpdate(company);
-	        resetTableView();
-	    }
+		if(new CompanyDialogController().show(new Company())){
+			resetTableView();
+		}
+	}
+	
+	@FXML
+	private void addGroup(){
+		Group group = new Group();
+		group.setCompany(selectedCompany);
+		if(new GroupDialogController().show(group)){
+			resetGroupTableView();
+		}
+	}
+	
+	@FXML
+	private void addTeam(){
+		Team team = new Team();
+		team.setGroup(selectedGroup);
+		if(new TeamDialogController().show(team)){
+			resetTeamTableView();
+		}
 	}
 	
 	@Override
@@ -114,17 +158,9 @@ public class CompanyController extends TableViewController{
 	
 	@Override
 	protected void editRecord(IRecord record) {
-		super.editRecord(record);
-		
-		if(record instanceof Company){
-			Company company = (Company) record;
-			System.out.println("pls dont edit company " + company.getName());
-		} else if(record instanceof Group){
-			Group group = (Group) record;
-			System.out.println("pls dont edit group " + group.getName());
+		if(new CompanyDialogController().show((Company)record)){
+			resetTableView();
 		}
-		
-		
 	}
 	
 }
