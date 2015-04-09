@@ -28,7 +28,7 @@ public class TeamDialogController  {
 	public boolean show(Team team) {
 	    try {
 	        FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(getClass().getResource("PlayerDialog.fxml"));
+	        loader.setLocation(getClass().getResource("TeamDialog.fxml"));
 	        AnchorPane page = (AnchorPane) loader.load();
 
 	        stage = new Stage();

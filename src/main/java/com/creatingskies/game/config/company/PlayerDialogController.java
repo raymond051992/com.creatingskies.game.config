@@ -28,7 +28,7 @@ public class PlayerDialogController  {
 	public boolean show(Player player) {
 	    try {
 	        FXMLLoader loader = new FXMLLoader();
-	        loader.setLocation(getClass().getResource("CompanyDialog.fxml"));
+	        loader.setLocation(getClass().getResource("PlayerDialog.fxml"));
 	        AnchorPane page = (AnchorPane) loader.load();
 
 	        stage = new Stage();

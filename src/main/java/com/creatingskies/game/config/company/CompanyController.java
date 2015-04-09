@@ -75,6 +75,11 @@ public class CompanyController extends TableViewController{
 		super.init();
 		companyDAO = new CompanyDAO();
 		
+		
+		addGroupButton.setVisible(false);
+		addTeamButton.setVisible(false);
+		addPlayerButton.setVisible(false);
+		
 		companyNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
 				cellData.getValue().getName()));
 		companyActionColumn.setCellFactory(generateCellFactory(Action.EDIT, Action.DELETE));
@@ -85,8 +90,27 @@ public class CompanyController extends TableViewController{
 		groupActionColumn.setCellFactory(generateCellFactory(groupsTable,
 				Action.EDIT, Action.DELETE));
 		
+		teamNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+		
+		teamActionColumn.setCellFactory(generateCellFactory(teamsTable,
+				Action.EDIT, Action.DELETE));
+		
+		playerNameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+		
+		playerActionColumn.setCellFactory(generateCellFactory(playersTable,
+				Action.EDIT, Action.DELETE));
+		
 		companiesTable.getSelectionModel().selectedItemProperty()
 				.addListener((observable, oldValue, newValue) -> loadCompanyDetails(newValue));
+		
+		groupsTable.getSelectionModel().selectedItemProperty()
+			.addListener((observable, oldValue, newValue) -> loadGroupDetails(newValue));
+		
+		teamsTable.getSelectionModel().selectedItemProperty()
+		.addListener((observable, oldValue, newValue) -> loadTeamDetails(newValue));
+		
+		playersTable.getSelectionModel().selectedItemProperty()
+		.addListener((observable, oldValue, newValue) -> loadPlayerDetails(newValue));
 		
 		resetTableView();
 	}
@@ -94,6 +118,23 @@ public class CompanyController extends TableViewController{
 	private void loadCompanyDetails(Company company) {
 		selectedCompany = company;
 		resetGroupTableView();
+		addGroupButton.setVisible(true);
+	}
+	
+	private void loadGroupDetails(Group group){
+		selectedGroup = group;
+		resetTeamTableView();
+		addTeamButton.setVisible(true);
+	}
+	
+	private void loadTeamDetails(Team team){
+		selectedTeam = team;
+		resetPlayerTableView();
+		addPlayerButton.setVisible(true);
+	}
+	
+	private void loadPlayerDetails(Player player){
+		selectedPlayer = player;
 	}
 	
 	private void resetTableView(){
@@ -107,7 +148,15 @@ public class CompanyController extends TableViewController{
 	}
 	
 	private void resetTeamTableView(){
-		
+		teamsTable.setItems(
+				FXCollections.observableArrayList(
+						companyDAO.findAllTeamsForGroup(selectedGroup)));
+	}
+	
+	private void resetPlayerTableView(){
+		playersTable.setItems(
+				FXCollections.observableArrayList(
+						companyDAO.findAllPlayersForTeam(selectedTeam)));
 	}
 	
 	@FXML
@@ -132,6 +181,15 @@ public class CompanyController extends TableViewController{
 		team.setGroup(selectedGroup);
 		if(new TeamDialogController().show(team)){
 			resetTeamTableView();
+		}
+	}
+	
+	@FXML
+	private void addPlayer(){
+		Player player = new Player();
+		player.setTeam(selectedTeam);
+		if(new PlayerDialogController().show(player)){
+			resetPlayerTableView();
 		}
 	}
 	
