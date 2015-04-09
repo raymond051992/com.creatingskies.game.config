@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert.AlertType;
@@ -15,8 +16,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
@@ -38,9 +37,8 @@ public class GameEventPropertiesViewController extends PropertiesViewController{
 	@FXML private ComboBox<Company> companyComboBox;
 	@FXML private ComboBox<Game> gameComboBox;
 	@FXML private DatePicker eventDatePicker;
-	@FXML private TextField hourTextField;
-	@FXML private TextField minuteTextField;
-	@FXML private ChoiceBox<String> periodChoiceBox;
+	@FXML private ChoiceBox<Integer> hourChoiceBox;
+	@FXML private ChoiceBox<Integer> minuteChoiceBox;
 	@FXML private Button saveButton;
 	@FXML private Button cancelButton;
 	@FXML private Button backToListButton;
@@ -100,24 +98,19 @@ public class GameEventPropertiesViewController extends PropertiesViewController{
             }
         });
 		
-		hourTextField.addEventFilter(KeyEvent.KEY_TYPED, Util.createIntegerOnlyKeyEvent());
-		hourTextField.textProperty().addListener(Util.createIntegerOnlyChangeListener(hourTextField,12));
-		minuteTextField.addEventFilter(KeyEvent.KEY_TYPED, Util.createIntegerOnlyKeyEvent());
-		minuteTextField.textProperty().addListener(Util.createIntegerOnlyChangeListener(minuteTextField,59));
+		hourChoiceBox.getItems().clear();
+		hourChoiceBox.setItems(FXCollections.observableArrayList(Util.getListOfHours()));
 		
-		periodChoiceBox.getItems().clear();
-		periodChoiceBox.getItems().add("AM");
-		periodChoiceBox.getItems().add("PM");
+		minuteChoiceBox.getItems().clear();
+		minuteChoiceBox.setItems(FXCollections.observableArrayList(Util.getListMinutes()));
 		
 		companyComboBox.getSelectionModel().select(getGameEvent().getCompany());;
 		gameComboBox.getSelectionModel().select(getGameEvent().getGame());
 		
-		
 		eventDatePicker.setValue(Util.toLocalDate(getGameEvent().getEventDate()));
-		hourTextField.setText(String.valueOf(Util.getHourFromDate(getGameEvent().getEventDate())));
-		minuteTextField.setText(String.valueOf(Util.getMinuteFromDate(getGameEvent().getEventDate())));
-		periodChoiceBox.getSelectionModel().select(Util.getAMPMFromDate(getGameEvent().getEventDate()));
 		
+		hourChoiceBox.getSelectionModel().select(Util.getHourFromDate(getGameEvent().getEventDate()));
+		minuteChoiceBox.getSelectionModel().select(Util.getMinuteFromDate(getGameEvent().getEventDate()));
 		disableFields();
 	}
 	
@@ -125,10 +118,9 @@ public class GameEventPropertiesViewController extends PropertiesViewController{
 		if(getCurrentAction() == Action.VIEW){
 			companyComboBox.setDisable(true);
 			gameComboBox.setDisable(true);
-			eventDatePicker.setEditable(false);
-			hourTextField.setEditable(false);
-			minuteTextField.setEditable(false);
-			periodChoiceBox.setDisable(true);
+			eventDatePicker.setDisable(true);
+			hourChoiceBox.setDisable(true);
+			minuteChoiceBox.setDisable(true);
 			
 			saveButton.setVisible(false);
 			cancelButton.setVisible(false);
@@ -136,10 +128,9 @@ public class GameEventPropertiesViewController extends PropertiesViewController{
 		}else{
 			companyComboBox.setDisable(false);
 			gameComboBox.setDisable(false);
-			eventDatePicker.setEditable(false);
-			hourTextField.setEditable(true);
-			minuteTextField.setEditable(true);
-			periodChoiceBox.setDisable(false);
+			eventDatePicker.setDisable(false);
+			hourChoiceBox.setDisable(false);
+			minuteChoiceBox.setDisable(false);
 			
 			saveButton.setVisible(true);
 			cancelButton.setVisible(true);
@@ -183,11 +174,11 @@ public class GameEventPropertiesViewController extends PropertiesViewController{
 			new AlertDialog(AlertType.ERROR, "Invalid fields", null, "Date is required.").showAndWait();
 			return false;
 		}
-		if(Util.isBlank(hourTextField.getText()) && Util.isZero(hourTextField.getText())){
+		if(hourChoiceBox.getSelectionModel().getSelectedItem() == null){
 			new AlertDialog(AlertType.ERROR, "Invalid fields", null, "Event hour is required.").showAndWait();
 			return false;
 		}
-		if(Util.isBlank(minuteTextField.getText()) && Util.isZero(minuteTextField.getText())){
+		if(minuteChoiceBox.getSelectionModel().getSelectedItem() == null){
 			new AlertDialog(AlertType.ERROR, "Invalid fields", null, "Event minute is required.").showAndWait();
 			return false;
 		}
@@ -203,14 +194,10 @@ public class GameEventPropertiesViewController extends PropertiesViewController{
 	private Date getEventDate(){
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(Date.from(Instant.from(eventDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()))));
-		
-		int hour = Integer.parseInt(hourTextField.getText());
-		int minute = Integer.parseInt(minuteTextField.getText());
 				
-		cal.set(Calendar.HOUR, (hour == 12) ? 0 : hour);
-		cal.set(Calendar.MINUTE, minute);
+		cal.set(Calendar.HOUR_OF_DAY, hourChoiceBox.getSelectionModel().getSelectedItem());
+		cal.set(Calendar.MINUTE, minuteChoiceBox.getSelectionModel().getSelectedItem());
 		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.AM_PM, (periodChoiceBox.getSelectionModel().equals("AM")) ? 0 : 1);
 		
 		return cal.getTime();
 	}

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="300.0" maxWidth="560.0" minHeight="300.0" minWidth="560.0" prefHeight="300.0" prefWidth="560.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.creatingskies.game.config.event.GameEventPropertiesViewController">
+<AnchorPane maxHeight="300.0" maxWidth="500.0" minHeight="300.0" minWidth="500.0" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.creatingskies.game.config.event.GameEventPropertiesViewController">
    <children>
       <VBox layoutX="159.0" layoutY="21.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
@@ -14,14 +14,12 @@
                <children>
                   <Label maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Company" />
                   <ComboBox fx:id="companyComboBox" maxWidth="350.0" minWidth="350.0" prefHeight="25.0" prefWidth="350.0" />
-                  <Button maxWidth="70.0" minWidth="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="70.0" text="Add" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" prefWidth="280.0" spacing="10.0">
                <children>
                   <Label maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Game" />
                   <ComboBox fx:id="gameComboBox" maxWidth="350.0" minWidth="350.0" prefHeight="25.0" prefWidth="350.0" />
-                  <Button maxWidth="70.0" minWidth="70.0" mnemonicParsing="false" prefWidth="70.0" text="Add" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
@@ -33,11 +31,10 @@
             <HBox alignment="CENTER_LEFT" maxHeight="50.0" minHeight="50.0" prefHeight="50.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <Label maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Time" />
-                  <TextField fx:id="hourTextField" maxWidth="60.0" minWidth="60.0" prefHeight="25.0" prefWidth="60.0" />
+                  <ChoiceBox fx:id="hourChoiceBox" prefWidth="140.0" />
                   <Label text="HH" />
-                  <TextField fx:id="minuteTextField" maxWidth="60.0" minWidth="60.0" prefHeight="25.0" prefWidth="60.0" />
+                  <ChoiceBox fx:id="minuteChoiceBox" prefWidth="140.0" />
                   <Label text="MM" />
-                  <ChoiceBox fx:id="periodChoiceBox" maxWidth="60.0" minWidth="60.0" prefHeight="25.0" prefWidth="60.0" />
                </children>
             </HBox>
             <GridPane>
@@ -55,7 +52,7 @@
                         <Button fx:id="cancelButton" maxWidth="100.0" minWidth="100.0" mnemonicParsing="false" onAction="#cancel" prefWidth="100.0" text="Cancel" />
                      </children>
                   </HBox>
-                  <Button fx:id="backToListButton" maxWidth="100.0" minWidth="100.0" mnemonicParsing="false" onAction="#backToList" prefWidth="100.0" text="Back To List" />
+                  <Button fx:id="backToListButton" maxWidth="141.0" minWidth="100.0" mnemonicParsing="false" onAction="#backToList" prefHeight="25.0" prefWidth="141.0" text="Back To List" />
                </children>
                <VBox.margin>
                   <Insets top="20.0" />

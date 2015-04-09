@@ -21,6 +21,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 import com.creatingskies.game.classes.TableViewController;
+import com.creatingskies.game.classes.Util;
 import com.creatingskies.game.common.AlertDialog;
 import com.creatingskies.game.common.MainLayout;
 import com.creatingskies.game.model.IRecord;
@@ -47,7 +48,10 @@ public class GameEventTableViewController extends TableViewController{
 				cellData.getValue().getGame().getTitle()));
 		dateTableColumn.setCellValueFactory(cellData -> new SimpleStringProperty(
 				cellData.getValue().getEventDate().toString()));
-		actionTableColumn.setCellFactory(generateCellFactory(Action.VIEW, Action.EDIT, Action.DELETE));
+		actionTableColumn.setCellFactory(generateCellFactory(Action.DELETE,Action.EDIT,Action.VIEW));
+		
+		filterFromDatePicker.setValue(Util.toLocalDate(new Date()));
+		filterToDatePicker.setValue(Util.toLocalDate(new Date()));
 		
 		filter();
 	}
@@ -62,7 +66,7 @@ public class GameEventTableViewController extends TableViewController{
 		}
 		if(filterToDatePicker.getValue() != null){
 			criterions[1] = Restrictions.le("eventDate",
-					Date.from(Instant.from(filterToDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()))));
+					Util.addDays(Util.toDate(filterToDatePicker.getValue()), 1));
 		}
 		
 		eventsTable.setItems(FXCollections.observableArrayList(new GameEventDao().findAll(criterions)));
